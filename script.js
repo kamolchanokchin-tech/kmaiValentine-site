@@ -1,62 +1,72 @@
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const mainImage = document.getElementById("mainImage");
+const mainText = document.getElementById("mainText");
+const mainImg = document.getElementById("mainImg");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 
-let yesScale = 1;
-let noScale = 1;
-let triggered = false;
+const sushiFinalImg = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzd6NDBzc2E0emt2MGR2b3Z6NG95MzNmZzkyc29sNjAzc2VybTRwdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/icIr8rk03xQI6NS67S/giphy.gif";
 
-yesBtn.addEventListener("click", function () {
-  alert("Yayyyyy 💕");
-});
+const messages = [
+  "ปิปี๊อยากกินจริงๆหรอ",
+  "มันไกลน้า TT",
+  "เรากินบุฟเฟ่ต์กันไม่คุ้มหรอกกกก",
+  "คิดอีกรอบได้มั้ยยยยยยยย"
+];
 
-noBtn.addEventListener("mouseover", function () {
+const images = [
+  "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWIwajR4MTVnZ3VpeGJrYnBveXlrdmoxZWpwbDk1YjYyeGt1NmUyYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1J9sByLuRCB3ZwfS/giphy.gif", 
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdG5iYnp6b200enozc2FubHVyazNvODl2MG13d3gweTFlZ3lzb3V2MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Ywj2iCO1TOkyQ/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTR3aG03bnpobHV0aHd3b2VmcXBpdTN2dDVwYTJvemthNjhpcmI1aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MBfnmipP1NfTSKr2IE/giphy.gif",
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdlbXdjaXQ3ODM1azV5YWc5MzI2azkxbXkzOXllanVwb2pldGQ2bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SYEYjCCkcJSgjo6Svv/giphy.gif"
+];
 
-  noBtn.style.position = "fixed";
+let index = 0;
+let runAway = false;
+let scaleSize = 1;
 
-  const padding = 10;
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+yesBtn.addEventListener("click", () => {
 
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
+  if (index < messages.length) {
+    mainText.innerHTML = messages[index];
+    mainImg.src = images[index];
 
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+    index++;
 
-  yesScale += 0.6;
-  yesBtn.style.transform = `scale(${yesScale})`;
-
-  noScale -= 0.08;
-  if (noScale > 0.2) {
-    noBtn.style.transform = `scale(${noScale})`;
+    scaleSize += 0.2;
+    noBtn.style.transform = `scale(${scaleSize})`;
   }
 
-  if (yesScale >= 3 && !triggered) {
-    triggered = true;
-    rainHearts();
+  if (index === messages.length) {
+    runAway = true;
 
-    mainImage.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHxTcLHuBuo7tJik0UwbAl3CBkqAlm9RETOQ&s";
-    
-  question.classList.add("shake");
-}
+    const rect = yesBtn.getBoundingClientRect();
+
+    yesBtn.style.position = "fixed";
+    yesBtn.style.left = rect.left + "px";
+    yesBtn.style.top = rect.top + "px";
+  }
 });
 
-function rainHearts() {
-  for (let i = 0; i < 30; i++) {
-    const heart = document.createElement("div");
-    heart.innerHTML = "💖";
-    heart.style.position = "fixed";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.top = "-50px";
-    heart.style.fontSize = Math.random() * 30 + 20 + "px";
-    heart.style.animation = "fall 3s linear forwards";
-    document.body.appendChild(heart);
+yesBtn.style.zIndex = "10";
+yesBtn.addEventListener("mouseenter", () => {
 
-    setTimeout(() => {
-      heart.remove();
-    }, 3000);
-  }
-}
+  if (!runAway) return;
 
-const question = document.getElementById("question");
+  const maxX = window.innerWidth - yesBtn.offsetWidth;
+  const maxY = window.innerHeight - yesBtn.offsetHeight;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  yesBtn.style.left = randomX + "px";
+  yesBtn.style.top = randomY + "px";
+});
+
+noBtn.addEventListener("click", () => {
+
+  mainText.innerHTML = "นุว่าแร้วว่าปี๊ต้องอยากกิน 🍣💖"; 
+
+  mainImg.src = sushiFinalImg;
+
+  yesBtn.style.display = "none";
+  noBtn.style.display = "none";
+});
